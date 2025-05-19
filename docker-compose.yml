@@ -1,0 +1,25 @@
+services:
+  download-proxy:
+    build: .
+    container_name: download-proxy
+    ports:
+      - "5050:5050"
+    environment:
+      - PORT=5050
+      - DOWNLOAD_PATH=/watched/
+      - AUTH_TOKEN=${AUTH_TOKEN}  # Set this in .env file or pass directly
+      - UPSTREAM_DOMAIN=${UPSTREAM_DOMAIN}  # Set this in .env file or pass directly
+      - UPSTREAM_RANDOM_SUBDOMAIN=${UPSTREAM_RANDOM_SUBDOMAIN}  # Set this in .env file or pass directly
+      - DOWNLOAD_URL_PATTERN=${DOWNLOAD_URL_PATTERN}  # Set this in .env file or pass directly
+      - DETAILS_URL_PATTERN=${DETAILS_URL_PATTERN}  # Set this in .env file or pass directly
+      - DOWNLOAD_LINK_PATTERNS=${DOWNLOAD_LINK_PATTERNS}  # Set this in .env file or pass directly
+    volumes:
+      - ./watched:/watched
+      - ./modal.css:/app/modal.css:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5050/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
