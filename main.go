@@ -971,7 +971,6 @@ func downloadFile(id string) (string, error) {
 	log.Printf("[SUCCESS] File saved to: %s", filePath)
 	return cat, nil
 }
-
 func extractCategory(html string) string {
 	// Look for the tags div - try different patterns
 	var index int
@@ -991,7 +990,7 @@ func extractCategory(html string) string {
 
 	if index == -1 {
 		log.Printf("[DEBUG] Could not find tags div with any pattern")
-		return ""
+		return "other"
 	}
 
 	// Find the start of the div tag (if we found it mid-tag)
@@ -1067,19 +1066,19 @@ func extractCategory(html string) string {
 			category = strings.TrimSpace(category)
 			switch strings.ToLower(category) {
 			case "movie", "movies":
-				return "Movies"
+				return "movies"
 			case "tv":
-				return "TV"
+				return "tv"
 			case "apps", "applications", "appz", "mobile":
-				return "Apps"
+				return "apps"
 			case "games":
-				return "Games"
+				return "games"
 			case "music", "podcast":
-				return "Music"
+				return "music"
 			case "ebooks", "ebook", "books", "book", "audiobooks", "audiobook":
-				return "Books"
+				return "books"
 			default:
-				return category
+				return "other"
 			}
 		}
 
@@ -1087,7 +1086,7 @@ func extractCategory(html string) string {
 	}
 
 	log.Printf("[DEBUG] Could not extract category from tags")
-	return ""
+	return "other"
 }
 
 func handleProxy(w http.ResponseWriter, r *http.Request) {
