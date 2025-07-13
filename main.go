@@ -1093,7 +1093,18 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
 	// Get upstream host (rotates every 10 minutes if random subdomain is enabled)
 	dynamicHost := getUpstreamHost()
 
-	targetURL := dynamicHost + r.URL.String()
+	// Strip query strings from CSS requests
+	requestURL := r.URL.String()
+	if strings.HasSuffix(strings.ToLower(r.URL.Path), ".css") && r.URL.RawQuery != "" {
+		// Remove query string for CSS files
+		requestURL = r.URL.Path
+		if r.URL.Fragment != "" {
+			requestURL += "#" + r.URL.Fragment
+		}
+		log.Printf("[DEBUG] Stripped query string from CSS request: %s -> %s", r.URL.String(), requestURL)
+	}
+
+	targetURL := dynamicHost + requestURL
 
 	// Create proxy request
 	proxyReq, err := http.NewRequest(r.Method, targetURL, r.Body)
