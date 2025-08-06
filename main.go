@@ -1188,6 +1188,7 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
 				w.Header().Add(name, value)
 			}
 		}
+		w.WriteHeader(resp.StatusCode)
 		io.Copy(w, resp.Body)
 	}
 }
