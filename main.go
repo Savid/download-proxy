@@ -1073,10 +1073,14 @@ func extractCategory(html string) string {
 				return "apps"
 			case "games":
 				return "games"
-			case "music", "podcast":
+			case "music":
 				return "music"
-			case "ebooks", "ebook", "books", "book", "audiobooks", "audiobook":
+			case "podcast", "podcasts":
+				return "podcasts"
+			case "ebooks", "ebook", "books", "book":
 				return "books"
+			case "audiobooks", "audiobook":
+				return "audiobooks"
 			default:
 				return "other"
 			}
