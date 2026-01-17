@@ -1057,33 +1057,33 @@ func extractCategory(html string) string {
 		linkText = strings.TrimSpace(linkText)
 		log.Printf("[DEBUG] Found tag: %s", linkText)
 
-		// Check if this is a category (contains /)
+		// Check if this is a category
+		var category string
 		if strings.Contains(linkText, "/") {
 			parts := strings.Split(linkText, "/")
-			category := parts[0]
+			category = strings.TrimSpace(parts[0])
+		} else {
+			category = linkText
+		}
 
-			// Normalize category names
-			category = strings.TrimSpace(category)
-			switch strings.ToLower(category) {
-			case "movie", "movies":
-				return "movies"
-			case "tv":
-				return "tv"
-			case "apps", "applications", "appz", "mobile":
-				return "apps"
-			case "games":
-				return "games"
-			case "music":
-				return "music"
-			case "podcast", "podcasts":
-				return "podcasts"
-			case "ebooks", "ebook", "books", "book":
-				return "books"
-			case "audiobooks", "audiobook":
-				return "audiobooks"
-			default:
-				return "other"
-			}
+		// Normalize category names
+		switch strings.ToLower(category) {
+		case "movie", "movies":
+			return "movies"
+		case "tv":
+			return "tv"
+		case "apps", "applications", "appz", "mobile":
+			return "apps"
+		case "games":
+			return "games"
+		case "music":
+			return "music"
+		case "podcast", "podcasts":
+			return "podcasts"
+		case "ebooks", "ebook", "books", "book":
+			return "books"
+		case "audiobooks", "audiobook":
+			return "audiobooks"
 		}
 
 		start = linkIndex + endIndex
